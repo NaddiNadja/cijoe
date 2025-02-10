@@ -29,6 +29,8 @@
     -----------------
 """
 
+import logging as log
+
 
 def fio(cijoe, parameters="", env={}):
     """
@@ -39,5 +41,8 @@ def fio(cijoe, parameters="", env={}):
     """
 
     fio_bin = cijoe.getconf("fio.bin")
+    if not fio_bin:
+        log.error("missing config: fio.bin")
+        return 1, None
 
     return cijoe.run(f"{fio_bin} {parameters}", env=env)
