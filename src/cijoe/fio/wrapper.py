@@ -38,4 +38,6 @@ def fio(cijoe, parameters="", env={}):
     @returns err, state
     """
 
-    return cijoe.run(f"{cijoe.config.options['fio']['bin']} {parameters}", env=env)
+    fio_bin = cijoe.getconf("fio.bin")
+
+    return cijoe.run(f"{fio_bin} {parameters}", env=env)
