@@ -13,8 +13,9 @@ executing cijoe. Thus, no need to make this re-targetable.
 Step arguments
 --------------
 
-# Whether or not the generated report should be opened (in a browser)
-report_open: true|false
+* report_open: true|false
+  - Whether or not the generated report should be opened (in a browser)
+    can be specified in the configuration file with key cijoe.core.default.report_open
 """
 
 import logging as log
@@ -53,7 +54,9 @@ def timestamp_to_txt(value):
 def main(args, cijoe, step):
     """Produce a HTML report of the 'workflow.state' file in 'args.output'"""
 
-    report_open = step.get("with", {"report_open"})["report_open"]
+    report_open = step.get("with", {}).get(
+        "report_open", cijoe.getconf("cijoe.core.default.report_open")
+    )
 
     resources = get_resources()
 

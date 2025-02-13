@@ -18,6 +18,9 @@ script via workflow, such as these::
     with:
       pattern: "debian*"
 
+The pattern can also be specified in the configuration file with key 
+cijoe.system_imaging.default.pattern
+
 Retargetable: False
 -------------------
 
@@ -146,7 +149,9 @@ def diskimage_from_cloudimage(cijoe, image: dict):
 def main(args, cijoe, step):
     """Provision a qemu-guest using a cloud-init image"""
 
-    pattern = step.get("with", {}).get("pattern", None)
+    pattern = step.get("with", {}).get(
+        "pattern", cijoe.getconf("cijoe.system_imaging.default.pattern", None)
+    )
     if pattern is None:
         log.error("missing step-argument: with.pattern")
         return errno.EINVAL

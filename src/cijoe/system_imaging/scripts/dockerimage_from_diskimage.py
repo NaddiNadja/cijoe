@@ -18,6 +18,9 @@ script via workflow, such as these::
     with:
       pattern: "debian*"
 
+The pattern can also be specified in the configuration file with key 
+cijoe.system_imaging.default.pattern
+
 Retargetable: False
 -------------------
 
@@ -76,7 +79,9 @@ def dockerimage_from_diskimage(cijoe, image):
 def main(args, cijoe, step):
     """Create a docker image using the content of a .qcow2 image"""
 
-    pattern = step.get("with", {}).get("pattern", None)
+    pattern = step.get("with", {}).get(
+        "pattern", cijoe.getconf("cijoe.system_imaging.default.pattern", None)
+    )
     if pattern is None:
         log.error("missing step-argument: with.pattern")
         return 1

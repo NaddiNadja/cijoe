@@ -12,6 +12,13 @@ Retargetable: True
 ------------------
 
 Transfer from local to remote, the config.cijoe.transport determines the remote.
+
+Step arguments
+--------------
+
+* step.with.local_kdebs_dir: path to the local kdebs directory
+  - can be specified in the configuration file with key cijoe.linux.default.local_kdebs_dir
+
 """
 
 import errno
@@ -20,7 +27,9 @@ from pathlib import Path
 
 
 def main(args, cijoe, step):
-    deb_root = step.get("with", {}).get("local_kdebs_dir", None)
+    deb_root = step.get("with", {}).get(
+        "local_kdebs_dir", cijoe.getconf("cijoe.linux.default.local_kdebs_dir", None)
+    )
     if not deb_root:
         log.error("missing step-argument: with.local_kdebs_dir")
         return errno.EINVAL

@@ -30,6 +30,12 @@ cijoe also has primitives for transferring data:
 
 These are not used in the example code below, but you can experiment and try adding
 them yourself.
+
+Step arguments
+--------------
+
+* step.with.repeat: the number of times the message will be echoed (default = 1)
+  - can be specified in the configuration file with key cijoe.core.default.repeat
 """
 
 import logging as log
@@ -45,7 +51,11 @@ def main(args: Namespace, cijoe: Cijoe, step: dict):
     message = cijoe.getconf("example.message", "Hello World!")
 
     # When executed via workflow, grab the step-argument
-    repeat = int(step.get("with", {}).get("repeat", 1))
+    repeat = int(
+        step.get("with", {}).get(
+            "repeat", cijoe.getconf("cijoe.core.default.repeat", 1)
+        )
+    )
     if repeat < 1:
         log.error(f"Invalid step-argument: repeat({repeat}) < 1")
         return 1

@@ -12,10 +12,15 @@ Retargetable: False
 It is intended to be run "locally" since, currently the collection of the generated
 .debs are not retrieved via cijoe.get(), doing so would make it retargetable.
 
-Worklet arguments
------------------
+Step arguments
+--------------
 
-with.localversion
+* step.with.localversion
+  - can be specified in the configuration file with key cijoe.linux.default.localversion
+
+* step.with.run_local
+  - can be specified in the configuration file with key cijoe.linux.default.run_local
+
 """
 
 import logging as log
@@ -35,8 +40,12 @@ def main(args, cijoe, step):
     if err:
         return err
 
-    localversion = step.get("with", {}).get("localversion", "custom")
-    run_local = step.get("with", {}).get("run_local", True)
+    localversion = step.get("with", {}).get(
+        "localversion", cijoe.getconf("cijoe.linux.default.localversion", "custom")
+    )
+    run_local = step.get("with", {}).get(
+        "run_local", cijoe.getconf("cijoe.linux.default.run_local", True)
+    )
     run = cijoe.run_local if run_local else cijoe.run
 
     commands = [
